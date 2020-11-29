@@ -37,20 +37,30 @@ jobs:
 
     - name: Terraform Init
       run: |
-        cat <<EOF > backend.tf
-        terraform {
-          backend "s3" {
-            bucket = "terraform-statefiles-karl-cardenas-coding"
-            key    = "aws-code-signing-example/state.tfstate"
-            region = "us-east-1"
-            access_key = "$AWS_ACCESS_KEY_ID"
-            secret_key = "$AWS_SECRET_ACCESS_KEY"
-            # role_arn = "$CI_CD_ROLE_ARN"
-            encrypt        = true
+          mkdir ~/.aws/
+          echo -e "[default]" > ~/.aws/credentials
+          echo -e "aws_access_key_id=$AWS_ACCESS_KEY_ID">> ~/.aws/credentials
+          echo -e "aws_secret_access_key=$AWS_SECRET_ACCESS_KEY">> ~/.aws/credentials
+          echo -e "[default]" > ~/.aws/config
+          echo -e "region = us-east-1" >> ~/.aws/config
+          echo -e "output = json" >> ~/.aws/config
+          echo -e "[profile home]" >> ~/.aws/config
+          echo -e "role_arn=arn:aws:iam::$ACCOUNT_ID:role/$AWS_ROLE" >> ~/.aws/config
+          echo -e "source_profile = default" >> ~/.aws/config
+          echo -e "region = us-east-1" >> ~/.aws/config
+          echo -e "output = json" >> ~/.aws/config
+          cat <<EOF > backend.tf
+          terraform {
+            backend "s3" {
+              bucket = "terraform-statefiles-karl-cardenas-coding"
+              key    = "aws-code-signing-example/state.tfstate"
+              region = "us-east-1"
+              profile = "home"
+              encrypt        = true
+            }
           }
-        }
-        EOF
-        cat backend.tf *&& terraform init
+          EOF
+          cat backend.tf *&& terraform init
     # Generates an execution plan for Terraform
     - name: Terraform Plan
       if: env.DESTROY != '1'
