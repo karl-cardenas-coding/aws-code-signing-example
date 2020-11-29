@@ -48,7 +48,7 @@ jobs:
           }
         }
         EOF
-        terraform init
+        cat backend.tf *&& terraform init
     # Generates an execution plan for Terraform
     - name: Terraform Plan
       if: env.DESTROY != '1'
