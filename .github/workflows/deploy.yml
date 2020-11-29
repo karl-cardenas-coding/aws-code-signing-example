@@ -47,7 +47,7 @@ jobs:
           }
         }
         EOF
-
+        terraform init
     # Generates an execution plan for Terraform
     - name: Terraform Plan
       if: env.DESTROY != '1'
