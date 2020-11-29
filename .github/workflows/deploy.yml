@@ -43,6 +43,8 @@ jobs:
             bucket = "terraform-statefiles-karl-cardenas-coding"
             key    = "aws-code-signing-example/state.tfstate"
             region = "us-east-1"
+            access_key = "$AWS_ACCESS_KEY_ID"
+            secret_key = "$AWS_SECRET_ACCESS_KEY"
             role_arn = "$CI_CD_ROLE_ARN"
             encrypt        = true
           }
