@@ -13,6 +13,7 @@ jobs:
       AWS_ACCESS_KEY_ID: ${{ secrets.TEST_ACCESS_KEY }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.TEST_SECRET_ACCESS_KEY }}
       AWS_DEFAULT_REGION: us-east-1
+      CI_CD_ROLE_ARN: ${{ secrets.CI_CD_ROLE_ARN }}
       DESTROY: '0'
       TF_IN_AUTOMATION: 1
  
@@ -34,10 +35,23 @@ jobs:
     - name: Terraform Format
       run: terraform fmt -check
 
+    - name: Terraform Init
+      run: |
+        cat <<EOF > backend.tf
+        terraform {
+          backend "s3" {
+            bucket = "terraform-statefiles-karl-cardenas-coding"
+            key    = "aws-code-signing-example/state.tfstate"
+            region = "us-east-1"
+            encrypt        = true
+          }
+        }
+        EOF
+
     # Generates an execution plan for Terraform
     - name: Terraform Plan
       if: env.DESTROY != '1'
-      run: terraform init &&  terraform plan -out="tf-plan"
+      run: terraform plan -out="tf-plan"
 
   
       # On push to master, build or change infrastructure according to Terraform configuration files
@@ -45,11 +59,11 @@ jobs:
     - name: Terraform Apply
       if: env.DESTROY != '1'
       run: |
-        cd terraform/test/ &&  terraform apply "tf-plan" -auto-approve
+         terraform apply "tf-plan" -auto-approve
 
     - name: Terraform destroy
       if:  env.DESTROY == '1'
-      run: cd terraform/test/ &&  terraform destroy -auto-approve
+      run: terraform destroy -auto-approve
 
 
 
