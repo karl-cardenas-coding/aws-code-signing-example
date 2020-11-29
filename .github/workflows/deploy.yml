@@ -45,7 +45,7 @@ jobs:
           echo -e "region = us-east-1" >> ~/.aws/config
           echo -e "output = json" >> ~/.aws/config
           echo -e "[profile home]" >> ~/.aws/config
-          echo -e "role_arn=arn:aws:iam::$ACCOUNT_ID:role/$AWS_ROLE" >> ~/.aws/config
+          echo -e "role_arn=arn:aws:iam::$ACCOUNT_ID:role/$CI_CD_ROLE_ARN" >> ~/.aws/config
           echo -e "source_profile = default" >> ~/.aws/config
           echo -e "region = us-east-1" >> ~/.aws/config
           echo -e "output = json" >> ~/.aws/config
