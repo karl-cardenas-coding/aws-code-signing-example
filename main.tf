@@ -57,6 +57,9 @@ resource "aws_lambda_function" "test_lambda" {
 
 // This creates a zip file of our python file and uploads to AWS S3
 resource "null_resource" "build_upload" {
+  triggers = {
+    time = timestamp()
+  }
   provisioner "local-exec" {
     command = <<EOT
     zip lambda.zip ./lambda_function.py 
