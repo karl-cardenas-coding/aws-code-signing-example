@@ -16,6 +16,7 @@ jobs:
       CI_CD_ROLE_ARN: ${{ secrets.CI_CD_ROLE_ARN }}
       DESTROY: '0'
       TF_IN_AUTOMATION: 1
+      TF_VAR_role_arn: ${{ secrets.CI_CD_ROLE_ARN }}
  
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
@@ -60,11 +61,11 @@ jobs:
             }
           }
           EOF
-          pwd
+          terraform init
     # Generates an execution plan for Terraform
     - name: Terraform Plan
       if: env.DESTROY != '1'
-      run: terraform init && terraform plan -out="tf-plan"
+      run: terraform plan -out="tf-plan"
 
   
       # On push to master, build or change infrastructure according to Terraform configuration files
