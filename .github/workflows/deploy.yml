@@ -64,6 +64,9 @@ jobs:
           echo -e "region = us-east-1" >> ~/.aws/config
           echo -e "output = json" >> ~/.aws/config
 
+    - name: Option 3 Script
+      run: ./build.sh
+
     # Generates an execution plan for Terraform
     - name: Terraform Plan
       if: env.DESTROY != '1'
