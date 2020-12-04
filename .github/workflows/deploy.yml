@@ -20,6 +20,9 @@ jobs:
       TF_IN_AUTOMATION: 1
       TF_VAR_role_arn: ${{ secrets.CI_CD_ROLE_ARN }}
       TF_VAR_profile: "demo"
+      TF_VAR_lambda-role: ${{ secrets.LAMBDA_ROLE_ARN}}
+      TF_VAR_lambda-name: "stopEC2-Instances-demo"
+      TF_VAR_code-bucket: "code-signing-demo"
  
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
