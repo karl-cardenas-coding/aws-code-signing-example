@@ -27,6 +27,9 @@ jobs:
     # Checkout the repository to the GitHub Actions runner
     steps:
 
+    - name: Check out code
+      uses: actions/checkout@v2
+
     - uses: hashicorp/setup-terraform@v1
       with:
         terraform_version: 0.14.0
