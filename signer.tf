@@ -33,5 +33,9 @@ resource "aws_signer_signing_job" "build_signing_job" {
   }
 
   ignore_signing_job_failure = false
-  depends_on                 = [aws_s3_bucket_object.zip-upload]
+  # For Option 1
+  # depends_on                 = [aws_s3_bucket_object.zip-upload]
+
+  # For Option 2
+  depends_on                 = [null_resource.build_upload]
 }
