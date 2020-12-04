@@ -64,7 +64,7 @@ jobs:
     # Generates an execution plan for Terraform
     - name: Terraform Plan
       if: env.DESTROY != '1'
-      run: terraform init & terraform plan -out="tf-plan"
+      run: terraform init && terraform plan -out="tf-plan"
 
   
       # On push to master, build or change infrastructure according to Terraform configuration files
