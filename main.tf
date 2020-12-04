@@ -47,8 +47,12 @@ resource "aws_lambda_function" "test_lambda" {
   timeout       = 45
 
   code_signing_config_arn = aws_lambda_code_signing_config.abc-signer-profile-config.arn
+  # For option 1
+  # depends_on = [data.archive_file.lambda_zip]
 
-  depends_on = [data.archive_file.lambda_zip]
+  # For option 2
+  depends_on = [null_resource.build_upload]
+
 }
 
 // This creates a zip file of our python file and uploads to AWS S3
