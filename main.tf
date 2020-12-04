@@ -59,7 +59,7 @@ resource "aws_lambda_function" "test_lambda" {
 resource "null_resource" "build_upload" {
   provisioner "local-exec" {
     command = <<EOT
-    zip ./lambda_function.py lambda.zip
+    zip lambda.zip ./lambda_function.py 
     aws s3 cp "lambda.zip" "s3://${var.code-bucket}/unsigned"
     EOT
   }
