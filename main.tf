@@ -63,5 +63,4 @@ resource "null_resource" "build_upload" {
     aws s3 cp "lambda.zip" "s3://${var.code-bucket}/unsigned"
     EOT
   }
-  depends_on = ["null_resource.create-endpoint"]
 }
