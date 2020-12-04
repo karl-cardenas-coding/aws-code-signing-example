@@ -40,20 +40,8 @@ jobs:
       run: terraform fmt -check
 
     - name: Terraform Init
-      run: |
-          ls
-          cat <<EOF > backend.tf
-          terraform {
-            backend "s3" {
-              bucket = "terraform-statefiles-karl-cardenas-coding"
-              key    = "aws-code-signing-example/state.tfstate"
-              region = "us-east-1"
-              role_arn = "$CI_CD_ROLE_ARN"
-              encrypt        = true
-            }
-          }
-          EOF
-          terraform init
+      run: terraform init
+      
     # Generates an execution plan for Terraform
     - name: Terraform Plan
       if: env.DESTROY != '1'
