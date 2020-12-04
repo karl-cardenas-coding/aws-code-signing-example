@@ -23,3 +23,9 @@ variable "lambda-role" {
   type        = string
   description = "The IAM role that will be attached to the Lambda function"
 }
+
+variable "profile" {
+  type        = string
+  description = "AWS profile name to use for AWS CLI commands"
+  default     = ""
+}

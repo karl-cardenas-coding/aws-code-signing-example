@@ -64,7 +64,7 @@ resource "null_resource" "build_upload" {
   provisioner "local-exec" {
     command = <<EOT
     zip lambda.zip ./lambda_function.py 
-    aws s3 cp --profile="home" lambda.zip s3://${var.code-bucket}/unsigned
+    aws s3 cp --profile=${var.profile} lambda.zip s3://${var.code-bucket}/unsigned
     EOT
   }
 }
