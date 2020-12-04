@@ -14,6 +14,7 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_DEFAULT_REGION: us-east-1
       CI_CD_ROLE_ARN: ${{ secrets.CI_CD_ROLE_ARN }}
+      CI_CD_ROLE: ${{ secrets.CI_CD_ROLE }}
       DESTROY: '0'
       TF_IN_AUTOMATION: 1
       TF_VAR_role_arn: ${{ secrets.CI_CD_ROLE_ARN }}
