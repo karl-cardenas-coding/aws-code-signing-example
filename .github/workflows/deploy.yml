@@ -50,7 +50,7 @@ jobs:
           # echo -e "source_profile = default" >> ~/.aws/config
           # echo -e "region = us-east-1" >> ~/.aws/config
           # echo -e "output = json" >> ~/.aws/config
-          # cat <<EOF > backend.tf
+          cat <<EOF > backend.tf
           terraform {
             backend "s3" {
               bucket = "terraform-statefiles-karl-cardenas-coding"
@@ -61,11 +61,10 @@ jobs:
             }
           }
           EOF
-          terraform init
     # Generates an execution plan for Terraform
     - name: Terraform Plan
       if: env.DESTROY != '1'
-      run: terraform plan -out="tf-plan"
+      run: terraform init & terraform plan -out="tf-plan"
 
   
       # On push to master, build or change infrastructure according to Terraform configuration files
