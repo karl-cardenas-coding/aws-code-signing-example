@@ -1,6 +1,0 @@
-region      = "us-east-1"
-role_arn    = "arn:aws:iam::140040602879:role/automation-role"
-code-bucket = "code-signing-demo"
-lambda-name = "stopEC2-Instances-demo"
-lambda-role = "arn:aws:iam::140040602879:role/lambda-automation-role"
-profile     = "automation"
