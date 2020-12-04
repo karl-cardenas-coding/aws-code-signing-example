@@ -74,11 +74,11 @@
 #######################################
 # Lambda Resources Option 3
 #######################################
-In this scenario the Lambda is zipped and upload outside of the terraform execution
+# In this scenario the Lambda is zipped and upload outside of the terraform execution
 resource "aws_lambda_function" "test_lambda" {
-  s3_bucket     = var.code-bucket
+  s3_bucket = var.code-bucket
   # s3_key        = aws_signer_signing_job.build_signing_job.signed_object[0]["s3"][0]["key"]
-  s3_key        = 
+  s3_key        = local.lambdaSource
   function_name = var.lambda-name
   handler       = "lambda_function.lambda_handler"
   memory_size   = 128
@@ -102,5 +102,5 @@ data "aws_s3_bucket_objects" "signedLambdas" {
 
 locals {
   signedSourceList = data.aws_s3_bucket_objects.signedLambdas.keys
-  lambdaSource = try(local.signedSourceList[0], null)
+  lambdaSource     = try(local.signedSourceList[0], null)
 }
