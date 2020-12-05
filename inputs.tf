@@ -29,3 +29,8 @@ variable "profile" {
   description = "AWS profile name to use for AWS CLI commands"
   default     = ""
 }
+
+variable "tags" {
+  type = map(string)
+  description = "A map containg tags to pass to AWS resources."
+}

@@ -92,6 +92,7 @@ resource "aws_lambda_function" "test_lambda" {
 
   # For option 2
   # depends_on = [null_resource.build_upload]
+  tags = var.tags
 
 }
 
