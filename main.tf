@@ -1,6 +1,6 @@
-#######################################
-# Lambda Resources Option 1
-#######################################
+# ######################################
+# # Lambda Resources Option 1
+# ######################################
 # resource "aws_lambda_function" "test_lambda" {
 #   s3_bucket     = var.code-bucket
 #   s3_key        = aws_signer_signing_job.build_signing_job.signed_object[0]["s3"][0]["key"]
@@ -33,9 +33,9 @@
 #   depends_on = [data.archive_file.lambda_zip]
 # }
 
-#######################################
+######################################
 # Lambda Resources Option 2
-#######################################
+######################################
 # resource "aws_lambda_function" "test_lambda" {
 #   s3_bucket     = var.code-bucket
 #   s3_key        = aws_signer_signing_job.build_signing_job.signed_object[0]["s3"][0]["key"]
@@ -74,34 +74,90 @@
 #######################################
 # Lambda Resources Option 3
 #######################################
-# In this scenario the Lambda is zipped and upload outside of the terraform execution
-resource "aws_lambda_function" "test_lambda" {
-  s3_bucket = var.code-bucket
-  # s3_key        = aws_signer_signing_job.build_signing_job.signed_object[0]["s3"][0]["key"]
-  s3_key        = local.lambdaSource
-  function_name = var.lambda-name
-  handler       = "lambda_function.lambda_handler"
-  memory_size   = 128
-  runtime       = "python3.8"
-  role          = var.lambda-role
-  timeout       = 45
+#In this scenario the Lambda is zipped and upload outside of the terraform execution
+# resource "aws_lambda_function" "test_lambda" {
+#   s3_bucket = var.code-bucket
+#   # s3_key        = aws_signer_signing_job.build_signing_job.signed_object[0]["s3"][0]["key"]
+#   s3_key        = local.lambdaSource
+#   function_name = var.lambda-name
+#   handler       = "lambda_function.lambda_handler"
+#   memory_size   = 128
+#   runtime       = "python3.8"
+#   role          = var.lambda-role
+#   timeout       = 45
 
-  code_signing_config_arn = aws_lambda_code_signing_config.abc-signer-profile-config.arn
-  # For option 1
-  # depends_on = [data.archive_file.lambda_zip]
+#   code_signing_config_arn = aws_lambda_code_signing_config.abc-signer-profile-config.arn
+#   # For option 1
+#   # depends_on = [data.archive_file.lambda_zip]
 
-  # For option 2
-  # depends_on = [null_resource.build_upload]
-  tags = var.tags
+#   # For option 2
+#   # depends_on = [null_resource.build_upload]
+#   tags = var.tags
 
-}
+# }
 
-data "aws_s3_bucket_objects" "signedLambdas" {
-  bucket = var.code-bucket
-  prefix = "signed/"
-}
+# data "aws_s3_bucket_objects" "signedLambdas" {
+#   bucket = var.code-bucket
+#   prefix = "signed/"
+# }
 
-locals {
-  signedSourceList = data.aws_s3_bucket_objects.signedLambdas.keys
-  lambdaSource     = try(local.signedSourceList[0], null)
-}
+# locals {
+#   signedSourceList = data.aws_s3_bucket_objects.signedLambdas.keys
+#   lambdaSource     = try(local.signedSourceList[0], null)
+# }
+################################################
+# Lambda Resources Option 3 - Multiple Lambdas
+################################################
+#In this scenario the Lambda is zipped and upload outside of the terraform execution
+# resource "aws_lambda_function" "test_lambda" {
+#   s3_bucket = var.code-bucket
+  
+#   s3_key = local.signedSourceList[index(local.trimPrefix, "lambda")]
+  
+#   function_name = var.lambda-name
+#   handler       = "lambda_function.lambda_handler"
+#   memory_size   = 128
+#   runtime       = "python3.8"
+#   role          = var.lambda-role
+#   timeout       = 45
+
+#   code_signing_config_arn = aws_lambda_code_signing_config.abc-signer-profile-config.arn
+#   # For option 1
+#   # depends_on = [data.archive_file.lambda_zip]te
+
+#   # For option 2
+#   # depends_on = [null_resource.build_upload]
+#   tags = var.tags
+
+# }
+
+# resource "aws_lambda_function" "test_lambda_2" {
+#   s3_bucket = var.code-bucket
+#   s3_key        = local.signedSourceList[index(local.trimPrefix, "postBooks")]
+#   function_name = var.lambda-name
+#   handler       = "lambda_function.lambda_handler"
+#   memory_size   = 128
+#   runtime       = "python3.8"
+#   role          = var.lambda-role
+#   timeout       = 45
+
+#   code_signing_config_arn = aws_lambda_code_signing_config.abc-signer-profile-config.arn
+#   # For option 1
+#   # depends_on = [data.archive_file.lambda_zip]
+
+#   # For option 2
+#   # depends_on = [null_resource.build_upload]
+#   tags = var.tags
+
+# }
+
+# data "aws_s3_bucket_objects" "signedLambdas" {
+#   bucket = var.code-bucket
+#   prefix = "signed/"
+# }
+
+# locals {
+#   signedSourceList = data.aws_s3_bucket_objects.signedLambdas.keys
+#   lambdaSource     = try(local.signedSourceList[0], null)
+#   trimPrefix =  [ for item in  local.signedSourceList :  split("-", trimprefix(item, "signed/"))[0]]
+# }
